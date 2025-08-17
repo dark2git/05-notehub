@@ -9,9 +9,9 @@ import { fetchNotes } from "../../services/noteService";
 import NoteForm from "../NoteForm/NoteForm";
 import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
+import Loader from "../Loader/Loader";
 
 function App() {
-  // --- Стани ---
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +27,7 @@ function App() {
     debouncedSearch(value);
   }
 
-  const { data } = useQuery({
+  const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["request", searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
     placeholderData: keepPreviousData,
@@ -55,11 +55,24 @@ function App() {
         </button>
       </header>
 
-      {data && data?.notes.length > 0 ? (
+      {isLoading && <Loader />}
+      {isError && <p>Something went wrong...</p>}
+      {isFetching && !isLoading && (
+        <div className={css.fetchingOverlay}>
+          <Loader />
+        </div>
+      )}
+      {!isLoading && data && data?.notes.length > 0 ? (
         <NoteList notes={data.notes} />
       ) : (
-        <p>No notes, try again later</p>
+        !isLoading && <p>No notes, try again later</p>
       )}
+
+      {/* {isFetching && !isLoading && (
+        <div className={css.fetchingOverlay}>
+          <Loader />
+        </div>
+      )} */}
 
       {isModalOpen && (
         <Modal onClose={modalClose}>
