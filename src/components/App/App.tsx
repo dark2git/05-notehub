@@ -68,12 +68,6 @@ function App() {
         !isLoading && <p>No notes, try again later</p>
       )}
 
-      {/* {isFetching && !isLoading && (
-        <div className={css.fetchingOverlay}>
-          <Loader />
-        </div>
-      )} */}
-
       {isModalOpen && (
         <Modal onClose={modalClose}>
           <NoteForm
