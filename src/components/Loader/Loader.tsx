@@ -1,4 +1,4 @@
-import css from "./loader.module.css";
+import css from "./Loader.module.css";
 import { ClipLoader } from "react-spinners";
 
 export default function Loader() {
